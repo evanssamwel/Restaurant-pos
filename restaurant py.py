@@ -1,209 +1,115 @@
-from tkinter import*
+from tkinter import *
 import random
 import time
-import datetime
 
-root=Tk()
-root.geometry("1600x8000")
-root.title("Restaurant Management System")
+# Root Window Setup
+root = Tk()
+root.geometry("1200x700")
+root.title("Kenyan Restaurant Management System")
 
-Tops=Frame(root, width=1600,relief=SUNKEN)
-Tops.pack(side=TOP)
+# Top Frame for Title and Time
+top_frame = Frame(root, width=1200, relief=SUNKEN)
+top_frame.pack(side=TOP, fill=X)
 
-f1=Frame(root,width=800,height=700,relief=SUNKEN)
-f1.pack(side=LEFT)
+# Main Frame for Inputs and Outputs
+main_frame = Frame(root, relief=SUNKEN)
+main_frame.pack(side=LEFT, fill=BOTH, expand=True)
 
-#=================================================================================
-#                  TIME
-#================================================================================
-localtime=time.asctime(time.localtime(time.time()))
+# Styling Variables
+title_font = ('helvetica', 30, 'bold')
+label_font = ('arial', 16, 'bold')
+entry_bg_color = "#e6f7ff"
+button_bg_color = "#008cba"
 
-lblInfo=Label(Tops,font=('helvetica',50,'bold'),text="LAKEYARD RESTAURANT ",fg="Black",bd=10,anchor='w')
-lblInfo.grid(row=0,column=0)
+# Time Display
+localtime = time.asctime(time.localtime(time.time()))
 
-lblInfo=Label(Tops,font=('arial',20,'bold'),text=localtime,fg="Steel Blue",bd=10,anchor='w')
-lblInfo.grid(row=1,column=0)
+# Title and Time Display
+Label(top_frame, font=title_font, text="Welcome to Nyama Haven Restaurant", fg="black", anchor='w').pack(pady=10)
+Label(top_frame, font=('arial', 20, 'bold'), text=localtime, fg="green", anchor='w').pack()
 
-def Ref():
-    x=random.randint(10908,500876)
-    randomRef=str(x)
-    rand.set(randomRef)
+# Variables
+rand = StringVar()
+fries = StringVar()
+ugali = StringVar()
+soup = StringVar()
+chapati = StringVar()
+mbuzi = StringVar()
+drinks = StringVar()
+subtotal = StringVar()
+tax = StringVar()
+total = StringVar()
+service_charge = StringVar()
 
-    if (Fries.get()==""):
-        CoFries=0
-    else:
-        CoFries=float(Fries.get())
+# Utility Functions
 
+def validate_numeric(value):
+    try:
+        return float(value)
+    except ValueError:
+        return 0
 
+def calculate():
+    rand.set(random.randint(10000, 99999))
     
-    if (Noodles.get()==""):
-        CoNoodles=0
-    else:
-        CoNoodles=float(Noodles.get())
+    # Retrieve Values
+    cost_fries = validate_numeric(fries.get()) * 150  # Ksh
+    cost_ugali = validate_numeric(ugali.get()) * 100
+    cost_soup = validate_numeric(soup.get()) * 180
+    cost_chapati = validate_numeric(chapati.get()) * 50
+    cost_mbuzi = validate_numeric(mbuzi.get()) * 500
+    cost_drinks = validate_numeric(drinks.get()) * 120
 
+    # Calculate Costs
+    meal_cost = cost_fries + cost_ugali + cost_soup + cost_chapati + cost_mbuzi + cost_drinks
+    tax_cost = meal_cost * 0.16
+    service_cost = meal_cost * 0.1
+    total_cost = meal_cost + tax_cost + service_cost
 
+    # Update Outputs
+    subtotal.set(f"Ksh {meal_cost:.2f}")
+    tax.set(f"Ksh {tax_cost:.2f}")
+    service_charge.set(f"Ksh {service_cost:.2f}")
+    total.set(f"Ksh {total_cost:.2f}")
 
-    if (Soup.get()==""):
-        CoSoup=0
-    else:
-        CoSoup=float(Soup.get())
+def reset():
+    variables = [rand, fries, ugali, soup, chapati, mbuzi, drinks, subtotal, tax, service_charge, total]
+    for var in variables:
+        var.set("")
 
-
-
-    if (Burger.get()==""):
-        CoBurger=0
-    else:
-        CoBurger=float(Burger.get())
-
-        
-    if (Sandwich.get()==""):
-        CoSandwich=0
-    else:
-        CoSandwich=float(Sandwich.get())
-
-     
-    if (Drinks.get()==""):
-        CoD=0
-    else:
-        CoD=float(Drinks.get())
-
-                   
-    CostofFries =CoFries * 140
-    CostofDrinks=CoD * 65
-    CostofNoodles = CoNoodles* 90
-    CostofSoup = CoSoup * 140
-    CostBurger = CoBurger* 260
-    CostSandwich=CoSandwich * 300
-
-    CostofMeal= "Rs", str('%.2f' % (CostofFries+CostofDrinks+CostofNoodles+CostofSoup+CostBurger+CostSandwich))
-
-    PayTax=((CostofFries+CostofDrinks+CostofNoodles+CostofSoup+CostBurger+CostSandwich) * 0.2)
-
-    TotalCost=(CostofFries+CostofDrinks+CostofNoodles+CostofSoup+CostBurger+CostSandwich)
- 
-    Ser_Charge= ((CostofFries+CostofDrinks+CostofNoodles+CostofSoup+CostBurger+CostSandwich)/99)
-
-    Service = "Rs", str ('%.2f' % Ser_Charge)
-
-    OverAllCost ="Rs", str ('%.2f' % (PayTax+TotalCost+Ser_Charge))
-
-    PaidTax= "Rs", str ('%.2f' % PayTax)
-
-    Service_Charge.set(Service)
-    Cost.set(CostofMeal)
-    Tax.set(PaidTax)
-    SubTotal.set(CostofMeal)
-    Total.set(OverAllCost)
-    
-def qExit():
+def exit_app():
     root.destroy()
 
-def Reset():
-    rand.set("") 
-    Fries.set("")
-    Noodles.set("")
-    Soup.set("")
-    SubTotal.set("")
-    Total.set("")
-    Service_Charge.set("")
-    Drinks.set("")
-    Tax.set("")
-    Cost.set("")
-    Burger.set("")
-    Sandwich.set("")
-    
-#====================================Restaraunt Info 1===========================================================
-rand = StringVar()
-Fries=StringVar()
-Noodles=StringVar()
-Soup=StringVar()
-SubTotal=StringVar()
-Total=StringVar()
-Service_Charge=StringVar()
-Drinks=StringVar()
-Tax=StringVar()
-Cost=StringVar()
-Burger=StringVar()
-Sandwich=StringVar()
+# Menu and Inputs
+menu_items = [
+    ("Fries", fries),
+    ("Ugali", ugali),
+    ("Soup", soup),
+    ("Chapati", chapati),
+    ("Mbuzi Choma", mbuzi),
+    ("Drinks", drinks)
+]
 
+for i, (item, var) in enumerate(menu_items):
+    Label(main_frame, text=item, font=label_font, anchor="w").grid(row=i, column=0, padx=10, pady=5)
+    Entry(main_frame, font=label_font, textvariable=var, bd=5, bg=entry_bg_color, justify="right").grid(row=i, column=1, padx=10, pady=5)
 
+# Outputs
+output_items = [
+    ("Sub Total", subtotal),
+    ("Tax (16%)", tax),
+    ("Service Charge (10%)", service_charge),
+    ("Total", total)
+]
 
-lblReference= Label(f1, font=('arial', 16, 'bold'),text="Reference",bd=16,anchor="w")
-lblReference.grid(row=0, column=0)
-txtReference=Entry(f1, font=('arial',16,'bold'),textvariable=rand,bd=10,insertwidth=4,bg="powder blue",justify='right')
-txtReference.grid(row=0,column=1)
+for i, (item, var) in enumerate(output_items):
+    Label(main_frame, text=item, font=label_font, anchor="w").grid(row=i, column=2, padx=10, pady=5)
+    Entry(main_frame, font=label_font, textvariable=var, bd=5, bg=entry_bg_color, justify="right", state="readonly").grid(row=i, column=3, padx=10, pady=5)
 
-lblFries= Label(f1, font=('arial', 16, 'bold'),text="Fries",bd=16,anchor="w")
-lblFries.grid(row=1, column=0)
-txtFries=Entry(f1, font=('arial',16,'bold'),textvariable=Fries,bd=10,insertwidth=4,bg="powder blue",justify='right')
-txtFries.grid(row=1,column=1)
+# Buttons
+Button(main_frame, text="Calculate", font=label_font, bg=button_bg_color, fg="white", command=calculate).grid(row=6, column=0, padx=10, pady=20)
+Button(main_frame, text="Reset", font=label_font, bg=button_bg_color, fg="white", command=reset).grid(row=6, column=1, padx=10, pady=20)
+Button(main_frame, text="Exit", font=label_font, bg=button_bg_color, fg="white", command=exit_app).grid(row=6, column=2, padx=10, pady=20)
 
-
-lblNoodles= Label(f1, font=('arial', 16, 'bold'),text="Noodles",bd=16,anchor="w")
-lblNoodles.grid(row=2, column=0)
-txtNoodles=Entry(f1, font=('arial',16,'bold'),textvariable=Noodles,bd=10,insertwidth=4,bg="powder blue",justify='right')
-txtNoodles.grid(row=2,column=1)
-
-
-lblSoup= Label(f1, font=('arial', 16, 'bold'),text="Soup",bd=16,anchor="w")
-lblSoup.grid(row=3, column=0)
-txtSoup=Entry(f1, font=('arial',16,'bold'),textvariable=Soup,bd=10,insertwidth=4,bg="powder blue",justify='right')
-txtSoup.grid(row=3,column=1)
-
-lblBurger= Label(f1, font=('arial', 16, 'bold'),text="Burger",bd=16,anchor="w")
-lblBurger.grid(row=4, column=0)
-txtBurger=Entry(f1, font=('arial',16,'bold'),textvariable=Burger,bd=10,insertwidth=4,bg="powder blue",justify='right')
-txtBurger.grid(row=4,column=1)
-
-lblSandwich= Label(f1, font=('arial', 16, 'bold'),text="Sandwich",bd=16,anchor="w")
-lblSandwich.grid(row=5, column=0)
-txtSandwich=Entry(f1, font=('arial',16,'bold'),textvariable=Sandwich,bd=10,insertwidth=4,bg="powder blue",justify='right')
-txtSandwich.grid(row=5,column=1)
-
-#============================================================================================================
-#                                RESTAURANT INFO 2
-#========================================================================================
-
-lblDrinks= Label(f1, font=('arial', 16, 'bold'),text="Drinks",bd=16,anchor="w")
-lblDrinks.grid(row=0, column=2)
-txtDrinks=Entry(f1, font=('arial',16,'bold'),textvariable=Drinks,bd=10,insertwidth=4,bg="powder blue",justify='right')
-txtDrinks.grid(row=0,column=3)
-
-lblCost= Label(f1, font=('arial', 16, 'bold'),text="Cost of Meal",bd=16,anchor="w")
-lblCost.grid(row=1, column=2)
-txtCost=Entry(f1, font=('arial',16,'bold'),textvariable=Cost,bd=10,insertwidth=4,bg="powder blue",justify='right')
-txtCost.grid(row=1,column=3)
-
-
-lblService= Label(f1, font=('arial', 16, 'bold'),text="Service Charge",bd=16,anchor="w")
-lblService.grid(row=2, column=2)
-txtService=Entry(f1, font=('arial',16,'bold'),textvariable=Service_Charge,bd=10,insertwidth=4,bg="powder blue",justify='right')
-txtService.grid(row=2,column=3)
-
-
-lblStateTax= Label(f1, font=('arial', 16, 'bold'),text="State Tax",bd=16,anchor="w")
-lblStateTax.grid(row=3, column=2)
-txtStateTax=Entry(f1, font=('arial',16,'bold'),textvariable=Tax,bd=10,insertwidth=4,bg="powder blue",justify='right')
-txtStateTax.grid(row=3,column=3)
-
-lblSubTotal= Label(f1, font=('arial', 16, 'bold'),text="Sub Total",bd=16,anchor="w")
-lblSubTotal.grid(row=4, column=2)
-txtSubTotal=Entry(f1, font=('arial',16,'bold'),textvariable=SubTotal,bd=10,insertwidth=4,bg="powder blue",justify='right')
-txtSubTotal.grid(row=4,column=3)
-
-lblTotalCost= Label(f1, font=('arial', 16, 'bold'),text="Total Cost",bd=16,anchor="w")
-lblTotalCost.grid(row=5, column=2)
-txtTotalCost=Entry(f1, font=('arial',16,'bold'),textvariable=Total,bd=10,insertwidth=4,bg="powder blue",justify='right')
-txtTotalCost.grid(row=5,column=3)
-
-#==========================================Buttons==========================================================================================
-btnTotal=Button(f1,padx=16,pady=8,bd=16,fg="black",font=('arial',16,'bold'),width=10,text="Total",bg="powder blue",command=Ref).grid(row=7,column=1)
-
-btnReset=Button(f1,padx=16,pady=8,bd=16,fg="black",font=('arial',16,'bold'),width=10,text="Reset",bg="powder blue",command=Reset).grid(row=7,column=2)
-
-btnExit=Button(f1,padx=16,pady=8,bd=16,fg="black",font=('arial',16,'bold'),width=10,text="Exit",bg="powder blue",command=qExit).grid(row=7,column=3)
-
-
+# Start GUI
 root.mainloop()
-
-
